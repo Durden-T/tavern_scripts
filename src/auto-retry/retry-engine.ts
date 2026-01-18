@@ -217,7 +217,13 @@ async function executeRetryLoop<T>(
         toastr.success(`Auto-retry succeeded on attempt ${attempt}`);
       }
 
-      return { success: true, result: result as T, attempts: attempt, usedFallback, fallbackModel: currentFallbackModel };
+      return {
+        success: true,
+        result: result as T,
+        attempts: attempt,
+        usedFallback,
+        fallbackModel: currentFallbackModel,
+      };
     } catch (error) {
       lastError = error;
       console.warn(`[auto-retry] Attempt ${attempt} failed:`, error);
@@ -282,7 +288,13 @@ async function executeRetryLoop<T>(
 
       while (attempt < maxRetries) {
         if (ctx.aborted) {
-          return { success: false, error: new Error('Aborted by user'), attempts: attempt, usedFallback, fallbackModel: currentFallbackModel };
+          return {
+            success: false,
+            error: new Error('Aborted by user'),
+            attempts: attempt,
+            usedFallback,
+            fallbackModel: currentFallbackModel,
+          };
         }
 
         attempt++;
@@ -311,13 +323,25 @@ async function executeRetryLoop<T>(
             toastr.success(`Auto-retry succeeded with fallback model: ${fallbackModel.model}`);
           }
 
-          return { success: true, result: result as T, attempts: attempt, usedFallback, fallbackModel: currentFallbackModel };
+          return {
+            success: true,
+            result: result as T,
+            attempts: attempt,
+            usedFallback,
+            fallbackModel: currentFallbackModel,
+          };
         } catch (error) {
           lastError = error;
           console.warn(`[auto-retry] Fallback ${fallbackIndex + 1} attempt ${attempt} failed:`, error);
 
           if (ctx.aborted) {
-            return { success: false, error: new Error('Aborted by user'), attempts: attempt, usedFallback, fallbackModel: currentFallbackModel };
+            return {
+              success: false,
+              error: new Error('Aborted by user'),
+              attempts: attempt,
+              usedFallback,
+              fallbackModel: currentFallbackModel,
+            };
           }
 
           if (!isRetryableError(error)) {
@@ -341,11 +365,7 @@ async function executeRetryLoop<T>(
   return { success: false, error: lastError, attempts: attempt, usedFallback, fallbackModel: currentFallbackModel };
 }
 
-async function raceWithTimeouts<T>(
-  promise: Promise<T>,
-  ctx: RetryContext,
-  settings: Settings,
-): Promise<T> {
+async function raceWithTimeouts<T>(promise: Promise<T>, ctx: RetryContext, settings: Settings): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     let resolved = false;
     let streamingCheckInterval: ReturnType<typeof setInterval> | undefined;

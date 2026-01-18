@@ -403,9 +403,7 @@ export async function runAllTests(): Promise<TestResult[]> {
       const settings: Settings = {
         ...defaultSettings,
         fallbackModelsEnabled: true,
-        fallbackModels: [
-          { apiurl: 'http://fallback1.test', key: 'key1', model: 'model1', source: 'openai' },
-        ],
+        fallbackModels: [{ apiurl: 'http://fallback1.test', key: 'key1', model: 'model1', source: 'openai' }],
       };
 
       let primaryCalls = 0;
