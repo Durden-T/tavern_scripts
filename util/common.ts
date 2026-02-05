@@ -25,6 +25,7 @@ export function chunkBy<T>(array: T[], predicate: (lhs: T, rhs: T) => boolean): 
   return chunks;
 }
 
+<<<<<<< HEAD
 export function regexFromString(input: string): RegExp | null {
   if (!input) {
     return null;
@@ -36,13 +37,36 @@ export function regexFromString(input: string): RegExp | null {
     }
     if (match[2] && !/^(?!.*?(.).*?\1)[gmixXsuUAJ]+$/.test(match[3])) {
       return new RegExp(input, 'i');
+=======
+export function regexFromString(input: string, replace_macros?: boolean): RegExp | null {
+  if (!input) {
+    return null;
+  }
+  const makeRegex = (pattern: string, flags: string) => {
+    if (replace_macros) {
+      pattern = substitudeMacros(pattern);
+    }
+    return new RegExp(pattern, flags);
+  };
+  try {
+    const match = input.match(/\/(.+)\/([a-z]*)/i);
+    if (!match) {
+      return makeRegex(_.escapeRegExp(input), 'i');
+    }
+    if (match[2] && !/^(?!.*?(.).*?\1)[gmixXsuUAJ]+$/.test(match[3])) {
+      return makeRegex(input, 'i');
+>>>>>>> f0b81694107b46de13c384cb766919135218501f
     }
     let flags = match[2] ?? '';
     _.pull(flags, 'g');
     if (flags.indexOf('i') === -1) {
       flags = flags + 'i';
     }
+<<<<<<< HEAD
     return new RegExp(match[1], flags);
+=======
+    return makeRegex(match[1], flags);
+>>>>>>> f0b81694107b46de13c384cb766919135218501f
   } catch {
     return null;
   }
@@ -82,7 +106,11 @@ export function literalYamlify(value: any) {
   return YAML.stringify(value, { blockQuote: 'literal' });
 }
 
+<<<<<<< HEAD
 export function parseString(content: string) {
+=======
+export function parseString(content: string): any {
+>>>>>>> f0b81694107b46de13c384cb766919135218501f
   let parsed: unknown;
   try {
     parsed = YAML.parseDocument(content, { merge: true }).toJS();
@@ -108,4 +136,21 @@ export function parseString(content: string) {
       }
     }
   }
+<<<<<<< HEAD
+=======
+  return parsed;
+}
+
+export async function checkAndUpdateCharacter(name: string, latest_version: string, png_url: string): Promise<void> {
+  const current_version = (await getCharacter(name)).version.trim() || '0.0.0';
+  if (compare(current_version, latest_version, '>=')) {
+    return;
+  }
+  await importRawCharacter(name, await fetch(png_url).then(response => response.blob()));
+  replaceCharacter(name, { version: latest_version });
+  toastr.success(
+    `角色卡已自动更新到 '${latest_version.startsWith('v') ? latest_version : `v${latest_version}`}'`,
+    name,
+  );
+>>>>>>> f0b81694107b46de13c384cb766919135218501f
 }
