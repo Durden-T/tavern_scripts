@@ -9,6 +9,14 @@ export function assignInplace<T>(destination: T[], new_array: T[]): T[] {
   return destination;
 }
 
+<<<<<<< HEAD
+=======
+// 修正 _.merge 对数组的合并逻辑, [1, 2, 3] 和 [4, 5] 合并后变成 [4, 5] 而不是 [4, 5, 3]
+export function correctlyMerge<TObject, TSource>(lhs: TObject, rhs: TSource): TObject & TSource {
+  return _.mergeWith(lhs, rhs, (_lhs, rhs) => (_.isArray(rhs) ? rhs : undefined));
+}
+
+>>>>>>> 8ff6bdca565e1a9dbd2d942472c26419a7132006
 export function chunkBy<T>(array: T[], predicate: (lhs: T, rhs: T) => boolean): T[][] {
   if (array.length === 0) {
     return [];
@@ -25,6 +33,7 @@ export function chunkBy<T>(array: T[], predicate: (lhs: T, rhs: T) => boolean): 
   return chunks;
 }
 
+<<<<<<< HEAD
 export function regexFromString(input: string): RegExp | null {
   if (!input) {
     return null;
@@ -36,13 +45,36 @@ export function regexFromString(input: string): RegExp | null {
     }
     if (match[2] && !/^(?!.*?(.).*?\1)[gmixXsuUAJ]+$/.test(match[3])) {
       return new RegExp(input, 'i');
+=======
+export function regexFromString(input: string, replace_macros?: boolean): RegExp | null {
+  if (!input) {
+    return null;
+  }
+  const makeRegex = (pattern: string, flags: string) => {
+    if (replace_macros) {
+      pattern = substitudeMacros(pattern);
+    }
+    return new RegExp(pattern, flags);
+  };
+  try {
+    const match = input.match(/\/(.+)\/([a-z]*)/i);
+    if (!match) {
+      return makeRegex(_.escapeRegExp(input), 'i');
+    }
+    if (match[2] && !/^(?!.*?(.).*?\1)[gmixXsuUAJ]+$/.test(match[3])) {
+      return makeRegex(input, 'i');
+>>>>>>> 8ff6bdca565e1a9dbd2d942472c26419a7132006
     }
     let flags = match[2] ?? '';
     _.pull(flags, 'g');
     if (flags.indexOf('i') === -1) {
       flags = flags + 'i';
     }
+<<<<<<< HEAD
     return new RegExp(match[1], flags);
+=======
+    return makeRegex(match[1], flags);
+>>>>>>> 8ff6bdca565e1a9dbd2d942472c26419a7132006
   } catch {
     return null;
   }
@@ -82,7 +114,11 @@ export function literalYamlify(value: any) {
   return YAML.stringify(value, { blockQuote: 'literal' });
 }
 
+<<<<<<< HEAD
 export function parseString(content: string) {
+=======
+export function parseString(content: string): any {
+>>>>>>> 8ff6bdca565e1a9dbd2d942472c26419a7132006
   let parsed: unknown;
   try {
     parsed = YAML.parseDocument(content, { merge: true }).toJS();
@@ -108,4 +144,8 @@ export function parseString(content: string) {
       }
     }
   }
+<<<<<<< HEAD
+=======
+  return parsed;
+>>>>>>> 8ff6bdca565e1a9dbd2d942472c26419a7132006
 }
