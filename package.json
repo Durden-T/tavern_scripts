@@ -3,7 +3,11 @@
     "build:dev": "webpack --mode development",
     "build": "webpack --mode production",
     "watch": "webpack --mode development --watch --progress",
+<<<<<<< HEAD
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,scss,html,vue}\"",
+=======
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,scss,html,vue}\" --no-error-on-unmatched-pattern",
+>>>>>>> d8b37673c7eb2745a3439060fbf772c95799b9eb
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "dump": "node dump_schema.ts",
@@ -88,7 +92,10 @@
     "gsap": "^3.14.2",
     "jquery": "^3.7.1",
     "jqueryui": "^1.11.1",
+<<<<<<< HEAD
     "json5": "^2.2.3",
+=======
+>>>>>>> d8b37673c7eb2745a3439060fbf772c95799b9eb
     "jsonrepair": "^3.13.2",
     "klona": "^2.0.6",
     "lodash": "^4.17.23",
